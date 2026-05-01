@@ -405,20 +405,40 @@ function OperationsStep(props: any) {
 }
 
 function ResultsStep({ result, companyName, projectName, currency }: any) {
+  const recommendation =
+    result.score >= 75
+      ? "The investment appears financially strong and operationally viable based on the current assumptions."
+      : result.score >= 50
+      ? "The investment may be viable, but the assumptions should be reviewed carefully before approval."
+      : "The investment carries significant financial or operational risk and should be challenged before approval.";
+
   return (
     <>
       <StepTitle
-        title="Decision Intelligence"
+        title="Executive Report Preview"
         text={`${companyName} · ${projectName}`}
       />
 
-      <div style={{ ...styles.scoreBox, borderColor: result.color }}>
-        <p style={styles.muted}>Investment Score</p>
-        <h1 style={{ color: result.color, margin: "6px 0" }}>
-          {result.score}/100
-        </h1>
-        <strong style={{ color: result.color }}>{result.status}</strong>
+      <div style={{ ...styles.reportHero, borderColor: result.color }}>
+        <div>
+          <p style={styles.muted}>Investment Recommendation</p>
+          <h1 style={{ color: result.color, margin: "8px 0" }}>
+            {result.status}
+          </h1>
+          <p style={{ color: "#334155", fontSize: 17, lineHeight: 1.6 }}>
+            {recommendation}
+          </p>
+        </div>
+
+        <div style={styles.scoreCircle}>
+          <span style={{ fontSize: 34, fontWeight: 900, color: result.color }}>
+            {result.score}
+          </span>
+          <span style={{ color: "#64748b", fontWeight: 700 }}>/100</span>
+        </div>
       </div>
+
+      <div style={styles.sectionTitle}>Financial Highlights</div>
 
       <div style={styles.metricsGrid}>
         <Metric label="TCO" value={result.tco} currency={currency} />
@@ -428,25 +448,19 @@ function ResultsStep({ result, companyName, projectName, currency }: any) {
           currency={currency}
         />
         <Metric
-          label="Annual Financing Cost"
-          value={result.annualFinancingCost}
-          currency={currency}
-        />
-        <Metric
-          label="Financing Cost Total"
-          value={result.financingCostTotal}
-          currency={currency}
-        />
-        <Metric
-          label="Revenue / Year"
-          value={result.revenuePerYear}
-          currency={currency}
-        />
-        <Metric
           label="Annual Profit"
           value={result.annualProfit}
           currency={currency}
         />
+        <Metric
+          label="Payback (Years)"
+          value={result.payback === Infinity ? 0 : result.payback}
+        />
+      </div>
+
+      <div style={styles.sectionTitle}>Pricing Intelligence</div>
+
+      <div style={styles.metricsGrid}>
         <Metric
           label="Cost / Hour"
           value={result.costPerHour}
@@ -463,10 +477,33 @@ function ResultsStep({ result, companyName, projectName, currency }: any) {
           currency={currency}
         />
         <Metric
-          label="Payback (Years)"
-          value={result.payback === Infinity ? 0 : result.payback}
+          label="Financing Cost Total"
+          value={result.financingCostTotal}
+          currency={currency}
         />
       </div>
+
+      <div style={styles.assumptionBox}>
+        <h3 style={{ marginTop: 0 }}>Executive Notes</h3>
+        <ul style={{ color: "#475569", lineHeight: 1.8 }}>
+          <li>
+            The recommendation is based on current input assumptions and should
+            be validated against operational reality.
+          </li>
+          <li>
+            Utilization, financing cost and residual value have significant
+            impact on the final investment score.
+          </li>
+          <li>
+            This preview is intended as a decision-support summary, not a final
+            approval document.
+          </li>
+        </ul>
+      </div>
+
+      <button style={styles.downloadButton}>
+        Download Executive Report — coming soon
+      </button>
     </>
   );
 }
@@ -654,5 +691,55 @@ const styles: any = {
     padding: 20,
     border: "1px solid #e2e8f0",
     marginTop: 12,
+  },  reportHero: {
+    display: "grid",
+    gridTemplateColumns: "1fr 150px",
+    gap: 24,
+    alignItems: "center",
+    padding: 26,
+    borderRadius: 24,
+    background: "#f8fafc",
+    border: "2px solid",
+    marginBottom: 26,
+  },
+  scoreCircle: {
+    width: 130,
+    height: 130,
+    borderRadius: "50%",
+    background: "white",
+    border: "1px solid #e2e8f0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    boxShadow: "0 12px 30px rgba(15,23,42,0.08)",
+  },
+  sectionTitle: {
+    marginTop: 28,
+    marginBottom: 14,
+    fontSize: 15,
+    fontWeight: 900,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: "#f97316",
+  },
+  assumptionBox: {
+    marginTop: 26,
+    padding: 22,
+    borderRadius: 20,
+    background: "white",
+    border: "1px solid #e2e8f0",
+  },
+  downloadButton: {
+    width: "100%",
+    marginTop: 24,
+    height: 54,
+    borderRadius: 16,
+    border: "none",
+    background: "#f97316",
+    color: "white",
+    fontSize: 16,
+    fontWeight: 900,
+    cursor: "pointer",
   },
 };
