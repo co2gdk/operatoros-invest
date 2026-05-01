@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-
+import jsPDF from "jspdf";
 export default function App() {
   const [step, setStep] = useState(1);
 
@@ -20,7 +20,7 @@ export default function App() {
   const [insurancePerYear, setInsurancePerYear] = useState(10000);
   const [hoursPerYear, setHoursPerYear] = useState(1200);
   const [margin, setMargin] = useState(25);
-
+  
   const result = useMemo(() => {
     const depreciationBase = Math.max(purchasePrice - residualValue, 0);
     const annualDepreciation = lifetime > 0 ? depreciationBase / lifetime : 0;
@@ -132,7 +132,58 @@ export default function App() {
     hoursPerYear,
     margin,
   ]);
+function downloadReport() {
+    const doc = new jsPDF();
 
+    doc.setFontSize(22);
+    doc.text("OperatorOS Invest", 20, 20);
+
+    doc.setFontSize(14);
+    doc.text("Executive Investment Report", 20, 32);
+
+    doc.setFontSize(11);
+    doc.text(`Company: ${companyName}`, 20, 50);
+    doc.text(`Project: ${projectName}`, 20, 58);
+    doc.text(`Currency: ${currency}`, 20, 66);
+
+    doc.setFontSize(14);
+    doc.text("Decision Intelligence", 20, 84);
+
+    doc.setFontSize(11);
+    doc.text(`Investment Score: ${result.score}/100`, 20, 96);
+    doc.text(`Recommendation: ${result.status}`, 20, 104);
+
+    doc.setFontSize(14);
+    doc.text("Financial Highlights", 20, 124);
+
+    doc.setFontSize(11);
+    doc.text(`TCO: ${formatMoney(result.tco, currency)}`, 20, 136);
+    doc.text(
+      `Annual Operating Cost: ${formatMoney(result.annualOperatingCost, currency)}`,
+      20,
+      144
+    );
+    doc.text(`Annual Profit: ${formatMoney(result.annualProfit, currency)}`, 20, 152);
+    doc.text(`Cost / Hour: ${formatMoney(result.costPerHour, currency)}`, 20, 160);
+    doc.text(
+      `Selling Price / Hour: ${formatMoney(result.sellingPrice, currency)}`,
+      20,
+      168
+    );
+
+    doc.setFontSize(14);
+    doc.text("Executive Notes", 20, 188);
+
+    doc.setFontSize(10);
+    doc.text(
+      "This report is generated from current user assumptions and should be validated before approval.",
+      20,
+      200,
+      { maxWidth: 170 }
+    );
+
+    doc.save(`OperatorOS-Invest-${projectName}.pdf`);
+  }
   return (
     <main style={styles.page}>
       <div style={styles.shell}>
@@ -192,12 +243,13 @@ export default function App() {
           )}
 
           {step === 5 && (
-            <ResultsStep
-              result={result}
-              companyName={companyName}
-              projectName={projectName}
-              currency={currency}
-            />
+           <ResultsStep
+  result={result}
+  companyName={companyName}
+  projectName={projectName}
+  currency={currency}
+  downloadReport={downloadReport}
+/>
           )}
 
           <div style={styles.nav}>
@@ -404,8 +456,13 @@ function OperationsStep(props: any) {
   );
 }
 
-function ResultsStep({ result, companyName, projectName, currency }: any) {
-  const recommendation =
+function ResultsStep({
+  result,
+  companyName,
+  projectName,
+  currency,
+  downloadReport,
+}: any) {  const recommendation =
     result.score >= 75
       ? "The investment appears financially strong and operationally viable based on the current assumptions."
       : result.score >= 50
@@ -501,9 +558,9 @@ function ResultsStep({ result, companyName, projectName, currency }: any) {
         </ul>
       </div>
 
-      <button style={styles.downloadButton}>
-        Download Executive Report — coming soon
-      </button>
+<button style={styles.downloadButton} onClick={downloadReport}>
+  Download Executive Report
+</button>
     </>
   );
 }
