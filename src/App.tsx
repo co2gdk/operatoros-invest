@@ -3,9 +3,13 @@ import jsPDF from "jspdf";
 export default function App() {
   const [step, setStep] = useState(1);
 
-  const [companyName, setCompanyName] = useState("Delpro A/S");
-  const [projectName, setProjectName] = useState("New asset investment");
-  const [currency, setCurrency] = useState("DKK");
+  const [country, setCountry] = useState("Denmark");
+const [companyId, setCompanyId] = useState("25019776");
+const [companyName, setCompanyName] = useState("Delpro A/S");
+const [projectName, setProjectName] = useState("New asset investment");
+const [department, setDepartment] = useState("Operations");
+const [investmentType, setInvestmentType] = useState("Machinery");
+const [currency, setCurrency] = useState("DKK");
 
   const [purchasePrice, setPurchasePrice] = useState(500000);
   const [residualValue, setResidualValue] = useState(100000);
@@ -194,13 +198,21 @@ function downloadReport() {
         <section style={styles.card}>
           {step === 1 && (
             <CompanyStep
-              companyName={companyName}
-              setCompanyName={setCompanyName}
-              projectName={projectName}
-              setProjectName={setProjectName}
-              currency={currency}
-              setCurrency={setCurrency}
-            />
+  country={country}
+  setCountry={setCountry}
+  companyId={companyId}
+  setCompanyId={setCompanyId}
+  companyName={companyName}
+  setCompanyName={setCompanyName}
+  projectName={projectName}
+  setProjectName={setProjectName}
+  department={department}
+  setDepartment={setDepartment}
+  investmentType={investmentType}
+  setInvestmentType={setInvestmentType}
+  currency={currency}
+  setCurrency={setCurrency}
+/>
           )}
 
           {step === 2 && (
@@ -325,18 +337,76 @@ function CompanyStep(props: any) {
         title="Company Setup"
         text="Identify the company and create the investment context."
       />
+
+      <Select
+        label="Country"
+        value={props.country}
+        setter={props.setCountry}
+        options={["Denmark", "Germany", "Sweden", "Norway", "UK", "USA", "Other"]}
+      />
+
+      <Field
+        label="Company ID / CVR / VAT"
+        value={props.companyId}
+        setter={props.setCompanyId}
+        type="text"
+      />
+
+      <button
+        type="button"
+        style={styles.lookupButton}
+        onClick={() => alert("Company lookup coming soon")}
+      >
+        Lookup Company
+      </button>
+
       <Field
         label="Company Name"
         value={props.companyName}
         setter={props.setCompanyName}
         type="text"
       />
+
       <Field
         label="Project Name"
         value={props.projectName}
         setter={props.setProjectName}
         type="text"
       />
+
+      <Select
+        label="Department"
+        value={props.department}
+        setter={props.setDepartment}
+        options={[
+          "Operations",
+          "Fleet",
+          "Procurement",
+          "Finance",
+          "Logistics",
+          "Energy",
+          "Other",
+        ]}
+      />
+
+      <Select
+        label="Investment Type"
+        value={props.investmentType}
+        setter={props.setInvestmentType}
+        options={[
+          "Machinery",
+          "Vehicles",
+          "Software",
+          "Personnel",
+          "Projects",
+          "Subscription",
+          "Facilities",
+          "Energy",
+          "Logistics",
+          "Other",
+        ]}
+      />
+
       <Select
         label="Currency"
         value={props.currency}
@@ -798,5 +868,16 @@ const styles: any = {
     fontSize: 16,
     fontWeight: 900,
     cursor: "pointer",
-  },
+  },lookupButton: {
+  width: "100%",
+  height: 48,
+  borderRadius: 14,
+  border: "none",
+  background: "#f97316",
+  color: "white",
+  fontSize: 16,
+  fontWeight: 900,
+  cursor: "pointer",
+  marginBottom: 18,
+},
 };
