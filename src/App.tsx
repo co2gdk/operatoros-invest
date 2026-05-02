@@ -203,12 +203,17 @@ function Progress({ step }: { step: number }) {
         return (
           <div key={label} className="operator-progress-item" style={styles.progressItem}>
             <div
-              style={{
-                ...styles.progressDot,
-                background: active || done ? "#0073a8" : "#e2e8f0",
-                color: active || done ? "white" : "#64748b",
-              }}
-            >
+  style={{
+    ...styles.progressDot,
+    background: active
+      ? "linear-gradient(135deg,#0073a8,#0b1f33)"
+      : done
+      ? "#eaf4fa"
+      : "#e2e8f0",
+    color: active ? "white" : done ? "#0073a8" : "#64748b",
+    border: done ? "1px solid #0073a8" : "none",
+  }}
+>
               {index + 1}
             </div>
             <span style={{ fontWeight: active ? 800 : 600 }}>{label}</span>
@@ -679,13 +684,17 @@ function Metric({ label, value, currency }: any) {
 
 
 const styles: any = {
-  page: {
-    minHeight: "100vh",
-    background: "linear-gradient(135deg,#f8fafc,#eef2f7)",
-    fontFamily: "Arial",
-    padding: "40px",
-    color: "#0f172a",
-  },
+   
+    page: {
+  minHeight: "100vh",
+  background:
+    "radial-gradient(circle at top left, rgba(0,115,168,0.16), transparent 34%), radial-gradient(circle at 85% 15%, rgba(11,31,51,0.12), transparent 30%), linear-gradient(135deg,#f7fafc,#edf5f9 55%,#eaf4fa)",
+  fontFamily: "Arial",
+  padding: "40px",
+  color: "#0f172a",
+  position: "relative",
+  overflowX: "hidden",
+},
   shell: {
     maxWidth: "1100px",
     margin: "0 auto",
@@ -714,14 +723,16 @@ const styles: any = {
     marginBottom: 24,
   },
   progressItem: {
-    background: "white",
-    borderRadius: 18,
-    padding: 14,
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    border: "1px solid #e2e8f0",
-  },
+  background: "rgba(255,255,255,0.82)",
+  backdropFilter: "blur(12px)",
+  borderRadius: 18,
+  padding: 14,
+  display: "flex",
+  alignItems: "center",
+  gap: 10,
+  border: "1px solid rgba(216,227,234,0.9)",
+  boxShadow: "0 8px 24px rgba(11,31,51,0.06)",
+},
   progressDot: {
     width: 30,
     height: 30,
@@ -732,11 +743,13 @@ const styles: any = {
     fontWeight: 800,
   },
   card: {
-    background: "white",
-    borderRadius: 28,
-    padding: 34,
-    boxShadow: "0 18px 60px rgba(15,23,42,0.12)",
-  },
+  background: "rgba(255,255,255,0.86)",
+  backdropFilter: "blur(18px)",
+  borderRadius: 28,
+  padding: 34,
+  border: "1px solid rgba(216,227,234,0.9)",
+  boxShadow: "0 24px 80px rgba(11,31,51,0.14)",
+},
   input: {
     width: "100%",
     height: 48,
