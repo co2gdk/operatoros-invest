@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import jsPDF from "jspdf";
+import { formatHours, formatMoney, formatNumber } from "./utils/format";
 import "./App.css";
 export default function App() {
   const [step, setStep] = useState(1);
@@ -1040,21 +1041,6 @@ function Metric({ label, value, currency }: any) {
   );
 }
 
-function formatMoney(value: number, currency: string) {
-  return `${formatNumber(value)} ${currency}`;
-}
-
-function formatNumber(value: number) {
-  return Number(value).toLocaleString("en-US", {
-    maximumFractionDigits: 2,
-  });
-}
-
-function formatHours(value: number) {
-  return Math.round(Number(value))
-    .toLocaleString("en-US")
-    .replace(/,/g, " ");
-}
 
 const styles: any = {
   page: {
