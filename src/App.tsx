@@ -233,50 +233,136 @@ const [currency, setCurrency] = useState("DKK");
 function downloadReport() {
     const doc = new jsPDF();
 
-    doc.setFontSize(22);
-    doc.text("OperatorOS Invest", 20, 20);
+    const left = 20;
+    let y = 20;
 
-    doc.setFontSize(14);
-    doc.text("Executive Investment Report", 20, 32);
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, 210, 28, "F");
 
-    doc.setFontSize(11);
-    doc.text(`Company: ${companyName}`, 20, 50);
-    doc.text(`Project: ${projectName}`, 20, 58);
-    doc.text(`Currency: ${currency}`, 20, 66);
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.text("OperatorOS Invest", left, 18);
 
-    doc.setFontSize(14);
-    doc.text("Decision Intelligence", 20, 84);
-
-    doc.setFontSize(11);
-    doc.text(`Investment Score: ${result.score}/100`, 20, 96);
-    doc.text(`Recommendation: ${result.status}`, 20, 104);
-
-    doc.setFontSize(14);
-    doc.text("Financial Highlights", 20, 124);
-
-    doc.setFontSize(11);
-    doc.text(`TCO: ${formatMoney(result.tco, currency)}`, 20, 136);
-    doc.text(
-      `Annual Operating Cost: ${formatMoney(result.annualOperatingCost, currency)}`,
-      20,
-      144
-    );
-    doc.text(`Annual Profit: ${formatMoney(result.annualProfit, currency)}`, 20, 152);
-    doc.text(`Cost / Hour: ${formatMoney(result.costPerHour, currency)}`, 20, 160);
-    doc.text(
-      `Selling Price / Hour: ${formatMoney(result.sellingPrice, currency)}`,
-      20,
-      168
-    );
-
-    doc.setFontSize(14);
-    doc.text("Executive Notes", 20, 188);
-
+    doc.setTextColor(249, 115, 22);
     doc.setFontSize(10);
+    doc.text("EXECUTIVE INVESTMENT REPORT", 145, 18);
+
+    y = 42;
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(16);
+    doc.text("Executive Summary", left, y);
+
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Company: ${companyName}`, left, y);
+    y += 7;
+    doc.text(`Project: ${projectName}`, left, y);
+    y += 7;
+    doc.text(`Currency: ${currency}`, left, y);
+
+    y += 14;
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.text("Decision Intelligence", left, y);
+
+    y += 10;
+    doc.setFontSize(11);
+    doc.text(`Investment Score: ${result.score}/100`, left, y);
+    y += 7;
+    doc.text(`Decision Level: ${result.decisionLevel}`, left, y);
+    y += 7;
+    doc.text(`Recommendation: ${result.status}`, left, y);
+
+    y += 14;
+
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Financial Highlights", left, y);
+
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(71, 85, 105);
+
+    const financialRows = [
+      ["TCO", formatMoney(result.tco, currency)],
+      ["Annual Operating Cost", formatMoney(result.annualOperatingCost, currency)],
+      ["Annual Profit", formatMoney(result.annualProfit, currency)],
+      ["Payback", `${formatNumber(result.payback === Infinity ? 0 : result.payback)} years`],
+      ["Break-even Hours", formatNumber(result.breakEvenHours === Infinity ? 0 : result.breakEvenHours)],
+      ["Required Revenue", formatMoney(result.requiredRevenue, currency)],
+      ["Margin", `${formatNumber(result.marginPercent)} %`],
+    ];
+
+    financialRows.forEach(([label, value]) => {
+      doc.text(`${label}: ${value}`, left, y);
+      y += 7;
+    });
+
+    y += 8;
+
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Pricing Intelligence", left, y);
+
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(71, 85, 105);
+
+    const pricingRows = [
+      ["Cost / Hour", formatMoney(result.costPerHour, currency)],
+      ["Selling Price / Hour", formatMoney(result.sellingPrice, currency)],
+      ["Profit / Hour", formatMoney(result.profitPerHour, currency)],
+      ["Financing Cost Total", formatMoney(result.financingCostTotal, currency)],
+    ];
+
+    pricingRows.forEach(([label, value]) => {
+      doc.text(`${label}: ${value}`, left, y);
+      y += 7;
+    });
+
+    y += 8;
+
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Advisor Notes", left, y);
+
+    y += 9;
+    doc.setFontSize(10);
+    doc.setTextColor(71, 85, 105);
+
+    result.advisorBullets.forEach((bullet: string) => {
+      const lines = doc.splitTextToSize(`• ${bullet}`, 170);
+      doc.text(lines, left, y);
+      y += lines.length * 6;
+    });
+
+    y += 6;
+
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Recommended Actions", left, y);
+
+    y += 9;
+    doc.setFontSize(10);
+    doc.setTextColor(71, 85, 105);
+
+    result.recommendedActions.forEach((action: string) => {
+      const lines = doc.splitTextToSize(`• ${action}`, 170);
+      doc.text(lines, left, y);
+      y += lines.length * 6;
+    });
+
+    y += 12;
+
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
     doc.text(
-      "This report is generated from current user assumptions and should be validated before approval.",
-      20,
-      200,
+      "This report is generated from current user assumptions and should be validated before final approval.",
+      left,
+      y,
       { maxWidth: 170 }
     );
 
