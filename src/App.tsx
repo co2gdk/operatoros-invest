@@ -687,20 +687,26 @@ function AssetStep(props: any) {
         title="Asset Investment"
         text="Enter the investment basics and expected residual value."
       />
+
       <Field
         label="Purchase Price"
         value={props.purchasePrice}
         setter={props.setPurchasePrice}
+        help="Total acquisition cost excluding VAT, including purchase price but excluding financing cost."
       />
+
       <Field
-        label="Residual Value"
+        label="Residual / Scrap Value"
         value={props.residualValue}
         setter={props.setResidualValue}
+        help="Expected resale or scrap value at the end of the asset lifetime."
       />
+
       <Field
-        label="Lifetime (Years)"
+        label="Expected Lifetime (Years)"
         value={props.lifetime}
         setter={props.setLifetime}
+        help="How many years the investment is expected to be operationally useful."
       />
     </>
   );
@@ -711,7 +717,7 @@ function FinancingStep(props: any) {
     <>
       <StepTitle
         title="Financing"
-        text="Model cash purchase, loan or leasing impact."
+        text="Model how the investment is funded and how financing impacts annual cost."
       />
 
       <Select
@@ -719,6 +725,7 @@ function FinancingStep(props: any) {
         value={props.financingType}
         setter={props.setFinancingType}
         options={["Cash", "Loan", "Lease"]}
+        help="Choose whether the investment is paid upfront, financed through a loan, or handled as a lease."
       />
 
       {props.financingType !== "Cash" && (
@@ -727,23 +734,26 @@ function FinancingStep(props: any) {
             label="Down Payment"
             value={props.downPayment}
             setter={props.setDownPayment}
+            help="Initial payment made before financing the remaining amount."
           />
+
           <Field
             label="Interest Rate %"
             value={props.interestRate}
             setter={props.setInterestRate}
+            help="Annual interest rate used to estimate the financing cost."
           />
+
           <Field
             label="Financing Term (Years)"
             value={props.financingTerm}
             setter={props.setFinancingTerm}
+            help="Expected financing or leasing period in years."
           />
 
           <div style={styles.infoBox}>
             <p style={styles.muted}>Estimated Monthly Payment</p>
-            <h2>
-              {formatMoney(props.result.monthlyPayment, props.currency)}
-            </h2>
+            <h2>{formatMoney(props.result.monthlyPayment, props.currency)}</h2>
           </div>
         </>
       )}
@@ -763,37 +773,55 @@ function OperationsStep(props: any) {
     <>
       <StepTitle
         title="Operations & Pricing"
-        text="Define operating costs, utilization and target margin."
+        text="Define operating cost, expected utilization, savings and commercial assumptions."
       />
+
+      <div style={styles.sectionTitle}>Operating Costs</div>
+
       <Field
-        label="Service / Year"
+        label="Service & Maintenance / Year"
         value={props.servicePerYear}
         setter={props.setServicePerYear}
+        help="Expected annual cost for service, maintenance, calibration, inspections and repairs."
       />
+
       <Field
         label="Insurance / Year"
         value={props.insurancePerYear}
         setter={props.setInsurancePerYear}
+        help="Expected annual insurance cost related to the investment."
       />
+
+      <div style={styles.sectionTitle}>Utilization</div>
+
       <Field
-        label="Hours / Year"
+        label="Expected Productive Hours / Year"
         value={props.hoursPerYear}
         setter={props.setHoursPerYear}
+        help="Expected annual hours where the asset is actively creating value."
       />
+
+      <div style={styles.sectionTitle}>Pricing & Benefits</div>
+
       <Field
         label="Target Margin %"
         value={props.margin}
         setter={props.setMargin}
+        help="Target margin used to calculate recommended selling price per hour."
       />
+
       <Field
         label="Annual Savings"
         value={props.annualSavings}
         setter={props.setAnnualSavings}
+        help="Annual cost reduction created by the investment, such as less outsourcing, less downtime or lower operating cost."
       />
+
       <Field
-        label="Extra Revenue / Year"
+        label="Additional Revenue / Year"
         value={props.extraRevenue}
         setter={props.setExtraRevenue}
+        help="Expected additional yearly revenue enabled by the investment."
       />
     </>
   );
@@ -954,10 +982,11 @@ function StepTitle({ title, text }: any) {
   );
 }
 
-function Field({ label, value, setter, type = "number" }: any) {
+function Field({ label, value, setter, type = "number", help }: any) {
   return (
-    <div style={{ marginBottom: 18 }}>
+    <div style={{ marginBottom: 20 }}>
       <label style={styles.label}>{label}</label>
+
       <input
         className="operator-input"
         style={styles.input}
@@ -967,14 +996,17 @@ function Field({ label, value, setter, type = "number" }: any) {
           setter(type === "number" ? Number(e.target.value) : e.target.value)
         }
       />
+
+      {help && <p style={styles.helpText}>{help}</p>}
     </div>
   );
 }
 
-function Select({ label, value, setter, options }: any) {
+function Select({ label, value, setter, options, help }: any) {
   return (
-    <div style={{ marginBottom: 18 }}>
+    <div style={{ marginBottom: 20 }}>
       <label style={styles.label}>{label}</label>
+
       <select
         className="operator-input"
         style={styles.input}
@@ -985,6 +1017,8 @@ function Select({ label, value, setter, options }: any) {
           <option key={option}>{option}</option>
         ))}
       </select>
+
+      {help && <p style={styles.helpText}>{help}</p>}
     </div>
   );
 }
@@ -1199,16 +1233,23 @@ const styles: any = {
     fontSize: 16,
     fontWeight: 900,
     cursor: "pointer",
-  },lookupButton: {
-  width: "100%",
-  height: 48,
-  borderRadius: 14,
-  border: "none",
-  background: "#f97316",
-  color: "white",
-  fontSize: 16,
-  fontWeight: 900,
-  cursor: "pointer",
-  marginBottom: 18,
-},
+  },
+  lookupButton: {
+    width: "100%",
+    height: 48,
+    borderRadius: 14,
+    border: "none",
+    background: "#f97316",
+    color: "white",
+    fontSize: 16,
+    fontWeight: 900,
+    cursor: "pointer",
+    marginBottom: 18,
+  },
+  helpText: {
+    margin: "7px 0 0",
+    color: "#64748b",
+    fontSize: 13,
+    lineHeight: 1.45,
+  },
 };
