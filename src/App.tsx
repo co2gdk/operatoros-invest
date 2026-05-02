@@ -375,7 +375,7 @@ function downloadReport() {
 
         <Progress step={step} />
 
-        <section style={styles.card}>
+        <section className="operator-card" style={styles.card}>
           {step === 1 && (
             <CompanyStep
   country={country}
@@ -448,7 +448,7 @@ function downloadReport() {
 />
           )}
 
-          <div style={styles.nav}>
+          <div className="operator-nav" style={styles.nav}>
             <button
               style={{
                 ...styles.secondaryButton,
@@ -490,13 +490,13 @@ function Progress({ step }: { step: number }) {
   const labels = ["Company", "Asset", "Financing", "Operations", "Results"];
 
   return (
-    <div style={styles.progressCard}>
+    <div className="operator-progress" style={styles.progressCard}>
       {labels.map((label, index) => {
         const active = step === index + 1;
         const done = step > index + 1;
 
         return (
-          <div key={label} style={styles.progressItem}>
+          <div key={label} className="operator-progress-item" style={styles.progressItem}>
             <div
               style={{
                 ...styles.progressDot,
@@ -740,7 +740,7 @@ function ResultsStep({
         text={`${companyName} · ${projectName}`}
       />
 
-      <div style={{ ...styles.reportHero, borderColor: result.color }}>
+      <div className="operator-report-hero" style={{ ...styles.reportHero, borderColor: result.color }}>
         <div>
           <p style={styles.muted}>Investment Recommendation</p>
           <strong style={{ color: result.color }}>{result.status}</strong>
@@ -759,7 +759,7 @@ function ResultsStep({
           </p>
         </div>
 
-        <div style={styles.scoreCircle}>
+        <div className="operator-score-circle" style={styles.scoreCircle}>
           <span style={{ fontSize: 34, fontWeight: 900, color: result.color }}>
             {result.score}
           </span>
@@ -769,7 +769,7 @@ function ResultsStep({
 
       <div style={styles.sectionTitle}>Financial Highlights</div>
 
-      <div style={styles.metricsGrid}>
+      <div className="operator-metrics-grid" style={styles.metricsGrid}>
         <Metric label="TCO" value={result.tco} currency={currency} />
         <Metric
           label="Annual Operating Cost"
@@ -785,7 +785,7 @@ function ResultsStep({
 
       <div style={styles.sectionTitle}>Pricing Intelligence</div>
 
-      <div style={styles.metricsGrid}>
+      <div className="operator-metrics-grid" style={styles.metricsGrid}>
         <Metric
           label="Cost / Hour"
           value={result.costPerHour}
