@@ -450,6 +450,7 @@ function downloadReport() {
 
           <div className="operator-nav" style={styles.nav}>
             <button
+              className="operator-secondary-button"
               style={{
                 ...styles.secondaryButton,
                 opacity: step === 1 ? 0.45 : 1,
@@ -462,6 +463,7 @@ function downloadReport() {
             </button>
 
             <button
+              className="operator-primary-button"
               style={styles.primaryButton}
               onClick={() => setStep(step < 5 ? step + 1 : 1)}
             >
@@ -482,6 +484,13 @@ function Header() {
       <p style={styles.subtitle}>
         Turn investment decisions into operational intelligence.
       </p>
+
+      <div className="operator-badge-row">
+        <span className="operator-badge">● Live calculation</span>
+        <span className="operator-badge">● Executive PDF</span>
+        <span className="operator-badge">● TCO / ROI / Payback</span>
+        <span className="operator-badge">● Decision advisor</span>
+      </div>
     </header>
   );
 }
@@ -538,6 +547,7 @@ function CompanyStep(props: any) {
 
       <button
         type="button"
+        className="operator-lookup-button"
         style={styles.lookupButton}
         onClick={() => alert("Company lookup coming soon")}
       >
@@ -841,7 +851,7 @@ function ResultsStep({
         </ul>
       </div>
 
-      <button style={styles.downloadButton} onClick={downloadReport}>
+      <button className="operator-download-button" style={styles.downloadButton} onClick={downloadReport}>
   Download Executive Report
 </button>
     </>
@@ -862,6 +872,7 @@ function Field({ label, value, setter, type = "number" }: any) {
     <div style={{ marginBottom: 18 }}>
       <label style={styles.label}>{label}</label>
       <input
+        className="operator-input"
         style={styles.input}
         type={type}
         value={value}
@@ -878,6 +889,7 @@ function Select({ label, value, setter, options }: any) {
     <div style={{ marginBottom: 18 }}>
       <label style={styles.label}>{label}</label>
       <select
+        className="operator-input"
         style={styles.input}
         value={value}
         onChange={(e) => setter(e.target.value)}
