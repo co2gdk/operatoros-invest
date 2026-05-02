@@ -75,6 +75,19 @@ const [currency, setCurrency] = useState("DKK");
     const totalAnnualBenefit = revenuePerYear + annualSavings + extraRevenue;
     const annualProfit = totalAnnualBenefit - annualOperatingCost;
     const profitPerHour = sellingPrice - costPerHour;
+
+    const breakEvenHours =
+      profitPerHour > 0 ? annualOperatingCost / profitPerHour : Infinity;
+
+    const requiredRevenue =
+      annualOperatingCost - annualSavings;
+
+    const marginAmount =
+      sellingPrice - costPerHour;
+
+    const marginPercent =
+      sellingPrice > 0 ? (marginAmount / sellingPrice) * 100 : 0;
+
     const payback =
       annualProfit > 0 ? purchasePrice / annualProfit : Infinity;
 
@@ -119,6 +132,10 @@ const [currency, setCurrency] = useState("DKK");
       revenuePerYear,
       annualProfit,
       profitPerHour,
+      breakEvenHours,
+      requiredRevenue,
+      marginAmount,
+      marginPercent,
       payback,
       tco,
       score,
@@ -597,10 +614,6 @@ function ResultsStep({
           value={result.annualProfit}
           currency={currency}
         />
-        <Metric
-          label="Payback (Years)"
-          value={result.payback === Infinity ? 0 : result.payback}
-        />
       </div>
 
       <div style={styles.sectionTitle}>Pricing Intelligence</div>
@@ -620,8 +633,23 @@ function ResultsStep({
           label="Profit / Hour"
           value={result.profitPerHour}
           currency={currency}
+        />        <Metric
+          label="Margin %"
+          value={result.marginPercent}
         />
         <Metric
+          label="Break-even Hours"
+          value={result.breakEvenHours === Infinity ? 0 : result.breakEvenHours}
+        />
+        <Metric
+          label="Required Revenue"
+          value={result.requiredRevenue}
+          currency={currency}
+        />
+        <Metric
+          label="Payback (Years)"
+          value={result.payback === Infinity ? 0 : result.payback}
+        />        <Metric
           label="Financing Cost Total"
           value={result.financingCostTotal}
           currency={currency}
