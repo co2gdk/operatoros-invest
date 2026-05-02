@@ -24,6 +24,8 @@ const [currency, setCurrency] = useState("DKK");
   const [insurancePerYear, setInsurancePerYear] = useState(10000);
   const [hoursPerYear, setHoursPerYear] = useState(1200);
   const [margin, setMargin] = useState(25);
+  const [annualSavings, setAnnualSavings] = useState(150000);
+  const [extraRevenue, setExtraRevenue] = useState(250000);
   
   const result = useMemo(() => {
     const depreciationBase = Math.max(purchasePrice - residualValue, 0);
@@ -70,9 +72,9 @@ const [currency, setCurrency] = useState("DKK");
     const sellingPrice = costPerHour * (1 + margin / 100);
 
     const revenuePerYear = sellingPrice * hoursPerYear;
-    const annualProfit = revenuePerYear - annualOperatingCost;
+    const totalAnnualBenefit = revenuePerYear + annualSavings + extraRevenue;
+    const annualProfit = totalAnnualBenefit - annualOperatingCost;
     const profitPerHour = sellingPrice - costPerHour;
-
     const payback =
       annualProfit > 0 ? purchasePrice / annualProfit : Infinity;
 
@@ -135,6 +137,8 @@ const [currency, setCurrency] = useState("DKK");
     insurancePerYear,
     hoursPerYear,
     margin,
+    annualSavings,
+    extraRevenue,
   ]);
 function downloadReport() {
     const doc = new jsPDF();
@@ -251,6 +255,10 @@ function downloadReport() {
               setHoursPerYear={setHoursPerYear}
               margin={margin}
               setMargin={setMargin}
+              annualSavings={annualSavings}
+              setAnnualSavings={setAnnualSavings}
+              extraRevenue={extraRevenue}
+              setExtraRevenue={setExtraRevenue}
             />
           )}
 
@@ -521,6 +529,16 @@ function OperationsStep(props: any) {
         label="Target Margin %"
         value={props.margin}
         setter={props.setMargin}
+      />
+      <Field
+        label="Annual Savings"
+        value={props.annualSavings}
+        setter={props.setAnnualSavings}
+      />
+      <Field
+        label="Extra Revenue / Year"
+        value={props.extraRevenue}
+        setter={props.setExtraRevenue}
       />
     </>
   );
