@@ -584,7 +584,16 @@ function ResultsStep({
       <div style={{ ...styles.reportHero, borderColor: result.color }}>
         <div>
           <p style={styles.muted}>Investment Recommendation</p>
-          <h1 style={{ color: result.color, margin: "8px 0" }}>
+          <h1
+            style={{
+              color: result.color,
+              margin: "8px 0",
+              fontSize: 42,
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              maxWidth: 720,
+            }}
+          >
             {result.status}
           </h1>
           <p style={{ color: "#334155", fontSize: 17, lineHeight: 1.6 }}>
@@ -762,11 +771,14 @@ const styles: any = {
   },
   title: {
     fontSize: 54,
-    margin: 0,
+    margin: "0 0 14px",
+    lineHeight: 1,
   },
   subtitle: {
     color: "#64748b",
     fontSize: 20,
+    margin: 0,
+    lineHeight: 1.5,
   },
   progressCard: {
     display: "grid",
@@ -864,16 +876,18 @@ const styles: any = {
     padding: 20,
     border: "1px solid #e2e8f0",
     marginTop: 12,
-  },  reportHero: {
+  },
+  reportHero: {
     display: "grid",
-    gridTemplateColumns: "1fr 150px",
+    gridTemplateColumns: "minmax(0, 1fr) 140px",
     gap: 24,
     alignItems: "center",
-    padding: 26,
+    padding: 28,
     borderRadius: 24,
     background: "#f8fafc",
     border: "2px solid",
     marginBottom: 26,
+    overflow: "hidden",
   },
   scoreCircle: {
     width: 130,
