@@ -339,14 +339,14 @@ const [currency, setCurrency] = useState("DKK");
     doc.setDrawColor(249, 115, 22);
     doc.roundedRect(150, y + 8, 34, 26, 5, 5, "FD");
 
-    doc.setFontSize(20);
+    doc.setFontSize(15);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(249, 115, 22);
-    doc.text(`${result.score}`, 167, y + 23, { align: "center" });
+    doc.text(`${result.score} / 100`, 167, y + 22, { align: "center" });
 
     doc.setFontSize(8);
     doc.setTextColor(100, 116, 139);
-    doc.text("/100", 167, y + 30, { align: "center" });
+    doc.text("score", 167, y + 30, { align: "center" });
 
     y += 55;
 
@@ -374,7 +374,7 @@ const [currency, setCurrency] = useState("DKK");
     );
     metricBox(
       "Break-even Hours",
-      formatNumber(result.breakEvenHours === Infinity ? 0 : result.breakEvenHours),
+      `${formatHours(result.breakEvenHours === Infinity ? 0 : result.breakEvenHours)} hours`,
       left + 91,
       y
     );
@@ -839,10 +839,28 @@ function ResultsStep({
         </div>
 
         <div className="operator-score-circle" style={styles.scoreCircle}>
-          <span style={{ fontSize: 34, fontWeight: 900, color: result.color }}>
-            {result.score}
+          <span
+            style={{
+              fontSize: 28,
+              fontWeight: 900,
+              color: result.color,
+              lineHeight: 1,
+            }}
+          >
+            {result.score} / 100
           </span>
-          <span style={{ color: "#64748b", fontWeight: 700 }}>/100</span>
+          <span
+            style={{
+              color: "#64748b",
+              fontWeight: 800,
+              fontSize: 12,
+              marginTop: 6,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+            }}
+          >
+            score
+          </span>
         </div>
       </div>
 
@@ -972,10 +990,18 @@ function Select({ label, value, setter, options }: any) {
 }
 
 function Metric({ label, value, currency }: any) {
+  const isHours = label.toLowerCase().includes("hours");
+
   return (
     <div style={styles.metric}>
       <p style={styles.muted}>{label}</p>
-      <h2>{currency ? formatMoney(value, currency) : formatNumber(value)}</h2>
+      <h2>
+        {isHours
+          ? `${formatHours(value)} hours`
+          : currency
+          ? formatMoney(value, currency)
+          : formatNumber(value)}
+      </h2>
     </div>
   );
 }
@@ -988,6 +1014,12 @@ function formatNumber(value: number) {
   return Number(value).toLocaleString("en-US", {
     maximumFractionDigits: 2,
   });
+}
+
+function formatHours(value: number) {
+  return Math.round(Number(value))
+    .toLocaleString("en-US")
+    .replace(/,/g, " ");
 }
 
 const styles: any = {
