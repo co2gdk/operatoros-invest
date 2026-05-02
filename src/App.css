@@ -1,5 +1,18 @@
 :root {
   color-scheme: light;
+
+  --color-navy: #0b1f33;
+  --color-blue: #0073a8;
+  --color-blue-dark: #005f8c;
+  --color-blue-soft: #eaf4fa;
+  --color-steel: #64748b;
+  --color-bg: #f7fafc;
+  --color-card: #ffffff;
+  --color-border: #d8e3ea;
+
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-risk: #dc2626;
 }
 
 * {
@@ -94,8 +107,8 @@ select {
 
 .operator-input:focus {
   outline: none;
-  border-color: #f97316 !important;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.14);
+  border-color: var(--color-blue) !important;
+  box-shadow: 0 0 0 4px rgba(0, 115, 168, 0.16);
   background: #ffffff !important;
 }
 

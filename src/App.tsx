@@ -205,7 +205,7 @@ function Progress({ step }: { step: number }) {
             <div
               style={{
                 ...styles.progressDot,
-                background: active || done ? "#f97316" : "#e2e8f0",
+                background: active || done ? "#0073a8" : "#e2e8f0",
                 color: active || done ? "white" : "#64748b",
               }}
             >
@@ -691,7 +691,7 @@ const styles: any = {
     margin: "0 auto",
   },
   kicker: {
-    color: "#f97316",
+    color: "#0073a8",
     fontWeight: 800,
     letterSpacing: "0.14em",
     marginBottom: 8,
@@ -835,7 +835,7 @@ const styles: any = {
     fontWeight: 900,
     letterSpacing: "0.08em",
     textTransform: "uppercase",
-    color: "#f97316",
+    color: "#0073a8",
   },
   assumptionBox: {
     marginTop: 26,
@@ -850,7 +850,7 @@ const styles: any = {
     height: 54,
     borderRadius: 16,
     border: "none",
-    background: "#f97316",
+    background: "#0073a8",
     color: "white",
     fontSize: 16,
     fontWeight: 900,
@@ -861,7 +861,7 @@ const styles: any = {
     height: 48,
     borderRadius: 14,
     border: "none",
-    background: "#f97316",
+    background: "#0073a8",
     color: "white",
     fontSize: 16,
     fontWeight: 900,

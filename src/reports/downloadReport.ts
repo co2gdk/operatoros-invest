@@ -36,7 +36,7 @@ export function downloadReport({
     addPageIfNeeded(24);
 
     y += 8;
-    doc.setTextColor(249, 115, 22);
+    doc.setTextColor(0, 115, 168);
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.text(title.toUpperCase(), left, y);
@@ -84,7 +84,7 @@ export function downloadReport({
   doc.setFont("helvetica", "bold");
   doc.text("OperatorOS Invest", left, 19);
 
-  doc.setTextColor(249, 115, 22);
+  doc.setTextColor(0, 115, 168);
   doc.setFontSize(9);
   doc.text("EXECUTIVE INVESTMENT REPORT", left, 27);
 
@@ -113,12 +113,12 @@ export function downloadReport({
   doc.text(`Currency: ${currency}`, left + 6, y + 37);
 
   doc.setFillColor(255, 255, 255);
-  doc.setDrawColor(249, 115, 22);
+  doc.setDrawColor(0, 115, 168);
   doc.roundedRect(150, y + 8, 34, 26, 5, 5, "FD");
 
   doc.setFontSize(15);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(249, 115, 22);
+  doc.setTextColor(0, 115, 168);
   doc.text(`${result.score} / 100`, 167, y + 22, { align: "center" });
 
   doc.setFontSize(8);
