@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import jsPDF from "jspdf";
+import "./App.css";
 export default function App() {
   const [step, setStep] = useState(1);
 
