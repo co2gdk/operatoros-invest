@@ -99,24 +99,94 @@ const [currency, setCurrency] = useState("DKK");
       residualValue;
 
     let score = 0;
-    if (annualProfit > 0) score += 25;
-    if (margin >= 25) score += 15;
-    if (payback <= 3) score += 25;
-    else if (payback <= 5) score += 15;
-    if (hoursPerYear >= 1200) score += 15;
-    else if (hoursPerYear >= 800) score += 8;
-    if (residualValue > 0) score += 10;
-    if (interestRate <= 8) score += 10;
 
-    let status = "High risk – review assumptions";
+    if (annualProfit > 0) score += 20;
+
+    if (payback <= 2) score += 25;
+    else if (payback <= 4) score += 18;
+    else if (payback <= 6) score += 10;
+
+    if (marginPercent >= 25) score += 15;
+    else if (marginPercent >= 15) score += 8;
+
+    if (breakEvenHours <= hoursPerYear * 0.75) score += 15;
+    else if (breakEvenHours <= hoursPerYear) score += 8;
+
+    if (residualValue > purchasePrice * 0.15) score += 10;
+    else if (residualValue > 0) score += 5;
+
+    if (financingType === "Cash") score += 10;
+    else if (interestRate <= 6) score += 10;
+    else if (interestRate <= 10) score += 5;
+
+    score = Math.min(score, 100);
+
+    let status = "Reject or redesign";
+    let decisionLevel = "High risk";
     let color = "#dc2626";
 
-    if (score >= 75) {
+    if (score >= 80) {
       status = "Strong investment";
+      decisionLevel = "Approve";
       color = "#16a34a";
+    } else if (score >= 65) {
+      status = "Good investment with conditions";
+      decisionLevel = "Approve with conditions";
+      color = "#65a30d";
     } else if (score >= 50) {
-      status = "Operationally viable, but utilization sensitive";
+      status = "Viable, but assumptions must be reviewed";
+      decisionLevel = "Review before approval";
       color = "#f97316";
+    }
+
+    const advisorBullets = [];
+
+    if (annualProfit > 0) {
+      advisorBullets.push("The investment generates a positive annual profit based on current assumptions.");
+    } else {
+      advisorBullets.push("The investment does not generate positive annual profit under current assumptions.");
+    }
+
+    if (payback <= 3) {
+      advisorBullets.push("Payback period is within a strong investment range.");
+    } else if (payback <= 6) {
+      advisorBullets.push("Payback period is acceptable, but should be validated against company policy.");
+    } else {
+      advisorBullets.push("Payback period is long and should be challenged before approval.");
+    }
+
+    if (marginPercent >= 25) {
+      advisorBullets.push("Margin level is healthy.");
+    } else {
+      advisorBullets.push("Margin is below recommended level. Consider higher pricing or lower operating cost.");
+    }
+
+    if (breakEvenHours <= hoursPerYear) {
+      advisorBullets.push("Expected utilization is above break-even requirement.");
+    } else {
+      advisorBullets.push("Expected utilization is below break-even requirement. Increase usage or adjust pricing.");
+    }
+
+    const recommendedActions = [];
+
+    if (marginPercent < 25) {
+      recommendedActions.push("Increase target margin to at least 25% if market allows.");
+    }
+
+    if (breakEvenHours > hoursPerYear) {
+      recommendedActions.push("Increase annual utilization or reduce fixed operating cost.");
+    }
+
+    if (payback > 5) {
+      recommendedActions.push("Review investment price, residual value or financing structure.");
+    }
+
+    if (interestRate > 10 && financingType !== "Cash") {
+      recommendedActions.push("Review financing terms due to high interest rate.");
+    }
+
+    if (recommendedActions.length === 0) {
+      recommendedActions.push("No critical actions identified. Validate assumptions before final approval.");
     }
 
     return {
@@ -140,7 +210,10 @@ const [currency, setCurrency] = useState("DKK");
       tco,
       score,
       status,
+      decisionLevel,
       color,
+      advisorBullets,
+      recommendedActions,
     };
   }, [
     purchasePrice,
@@ -584,18 +657,17 @@ function ResultsStep({
       <div style={{ ...styles.reportHero, borderColor: result.color }}>
         <div>
           <p style={styles.muted}>Investment Recommendation</p>
-          <h1
+          <strong style={{ color: result.color }}>{result.status}</strong>
+
+          <p
             style={{
-              color: result.color,
-              margin: "8px 0",
-              fontSize: 42,
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              maxWidth: 720,
+              marginTop: 10,
+              fontWeight: 800,
+              color: "#0f172a",
             }}
           >
-            {result.status}
-          </h1>
+            Decision level: {result.decisionLevel}
+          </p>
           <p style={{ color: "#334155", fontSize: 17, lineHeight: 1.6 }}>
             {recommendation}
           </p>
@@ -666,24 +738,24 @@ function ResultsStep({
       </div>
 
       <div style={styles.assumptionBox}>
-        <h3 style={{ marginTop: 0 }}>Executive Notes</h3>
+        <h3 style={{ marginTop: 0 }}>Advisor Notes</h3>
+
         <ul style={{ color: "#475569", lineHeight: 1.8 }}>
-          <li>
-            The recommendation is based on current input assumptions and should
-            be validated against operational reality.
-          </li>
-          <li>
-            Utilization, financing cost and residual value have significant
-            impact on the final investment score.
-          </li>
-          <li>
-            This preview is intended as a decision-support summary, not a final
-            approval document.
-          </li>
+          {result.advisorBullets.map((bullet: string) => (
+            <li key={bullet}>{bullet}</li>
+          ))}
+        </ul>
+
+        <h3>Recommended Actions</h3>
+
+        <ul style={{ color: "#475569", lineHeight: 1.8 }}>
+          {result.recommendedActions.map((action: string) => (
+            <li key={action}>{action}</li>
+          ))}
         </ul>
       </div>
 
-<button style={styles.downloadButton} onClick={downloadReport}>
+      <button style={styles.downloadButton} onClick={downloadReport}>
   Download Executive Report
 </button>
     </>
